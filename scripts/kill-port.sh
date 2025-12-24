@@ -11,6 +11,6 @@ elif command -v lsof >/dev/null 2>&1; then
     echo "${PIDS}" | xargs -r kill
   fi
 else
-  echo "Neither fuser nor lsof is available to free port ${PORT}." >&2
-  exit 1
+  echo "Neither fuser nor lsof is available; skipping port check for ${PORT}." >&2
+  exit 0
 fi
