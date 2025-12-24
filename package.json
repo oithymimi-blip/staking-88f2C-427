@@ -1,0 +1,25 @@
+{
+  "name": "bsc-usdt-puller",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prestart": "bash scripts/kill-port.sh",
+    "start": "node server.js",
+    "prestart:lan": "PORT=${PORT:-4001} bash scripts/kill-port.sh",
+    "start:lan": "HOST=0.0.0.0 PORT=${PORT:-4001} node server.js",
+    "prestart:tunnel": "PORT=${PORT:-4001} bash scripts/kill-port.sh",
+    "start:tunnel": "bash scripts/tunnel.sh",
+    "stop": "bash scripts/kill-port.sh",
+    "build": "bash scripts/build.sh"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.19.2",
+    "nodemailer": "^7.0.10"
+  },
+  "devDependencies": {
+    "localtunnel": "^2.0.2"
+  }
+}
